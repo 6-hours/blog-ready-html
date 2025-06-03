@@ -57,15 +57,26 @@
             let textBody = $input.value.split("\n\n"),
                 title = textBody[0],
                 date = textBody[1],
-                body = textBody.slice(2, textBody.length);
+                body = textBody.slice(2, textBody.length),
+                processedText;
+
+            if (title.search("by") !== -1) {
+                title = title.split(" by ");
+                processedText =
+                    `<h1><span id="title">${title[0]}</span> by ${title[1]}</h1>`
+                    ;
+            }
+            else {
+                processedText = `<h1><span id="title">${title}</span></h1>`;
+            }
 
             for (i in body) {
                 let inner;
-                
-                
+
+
                 body[i] = body[i].replaceAll(/\[(.+)\]/g, `<a href="">$1</a>`);
-                body[i] = body[i].replaceAll(/_(.+)_/g, `<u>$1</u>`);
-                body[i] = body[i].replaceAll(/\*(.+)\*/g, `<b>$1</b>`);
+                body[i] = body[i].replaceAll(/_([^_]*)_/g, `<u>$1</u>`);
+                body[i] = body[i].replaceAll(/\*([^*]*)\*/g, `<b>$1</b>`);
                 body[i] = body[i].replaceAll(/\/((?!.*>)[^/]*)\//g, `<i>$1</i>`);
 
             }
@@ -74,11 +85,8 @@
             processedBody += body.join("</p>\n\n<p>");
             processedBody += "</p>";
 
-            let processedText;
-
-            processedText =
-                `<h1 id="title">${title}</h1>
-
+            processedText +=
+                `
 <h6 class="date">${date}</h6>
 
 ${processedBody}`
