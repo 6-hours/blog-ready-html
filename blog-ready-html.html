@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Blog Ready HTML</title>
+    <style>
+        label {
+            margin: 10px;
+        }
+
+        textarea {
+            width: 75%;
+            height: 30vh;
+            resize: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Generate HTML-ready blog post from text</h1>
+
+    <label for="input">Input text here:</label>
+    <div style="margin: 20px; display:flex; align-items: flex-start; gap: 10px;">
+        <textarea id="input"></textarea>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="clearInput()">Clear</button>
+            <button onclick="processText()">Process</button>
+        </div>
+    </div>
+
+    <label for="output">HTML output:</label>
+    <div style="margin: 20px; display:flex; align-items: flex-start; gap: 10px;">
+
+        <textarea id="output"></textarea>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button id="copyButton" onclick="copyOutput()">Copy HTML</button>
+        </div>
+    </div>
+
+    <script>
+        let $input = document.getElementById("input"),
+            $output = document.getElementById("output"),
+            $tooltip = document.getElementById("tooltip"),
+            $copyButton = document.getElementById("copyButton");
+
+
+        function clearInput() {
+            $input.value = "";
+        }
+
+        function processText() {
+            let textBody = $input.value.split("\n\n"),
+                title = textBody[0],
+                date = textBody[1],
+                body = textBody.slice(2, textBody.length);
+
+            for (i in body) {
+                let inner;
+                
+                
+                body[i] = body[i].replaceAll(/\[(.+)\]/g, `<a href="">$1</a>`);
+                body[i] = body[i].replaceAll(/_(.+)_/g, `<u>$1</u>`);
+                body[i] = body[i].replaceAll(/\*(.+)\*/g, `<b>$1</b>`);
+                body[i] = body[i].replaceAll(/\/((?!.*>)[^/]*)\//g, `<i>$1</i>`);
+
+            }
+
+            let processedBody = "<p>";
+            processedBody += body.join("</p>\n\n<p>");
+            processedBody += "</p>";
+
+            let processedText;
+
+            processedText =
+                `<h1 id="title">${title}</h1>
+
+<h6 class="date">${date}</h6>
+
+${processedBody}`
+                ;
+
+            $output.value = processedText;
+        }
+
+        function copyOutput() {
+            $output.select();
+            navigator.clipboard.writeText($output.value);
+            $copyButton.innerText = "Copied";
+            setTimeout(() => {
+                copyButton.innerText = "Copy HTML";
+            }, "1000");
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
