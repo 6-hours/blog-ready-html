@@ -77,7 +77,7 @@
                 body[i] = body[i].replaceAll(/\[(.+)\]/g, `<a href="">$1</a>`);
                 body[i] = body[i].replaceAll(/_([^_]*)_/g, `<u>$1</u>`);
                 body[i] = body[i].replaceAll(/\*([^*]*)\*/g, `<b>$1</b>`);
-                body[i] = body[i].replaceAll(/\/((?!.*>)[^/]*)\//g, `<i>$1</i>`);
+                body[i] = body[i].replaceAll(/\/\/([^/]*)\/\//g, `<i>$1</i>`);
 
             }
 
